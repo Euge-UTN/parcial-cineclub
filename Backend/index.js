@@ -10,6 +10,10 @@ app.use(morgan('dev'))
 
 const PORT = process.env.PORT || 3001
 
+app.get('/api/test', (request, response) => {
+  response.json({ message: 'Backend funcionando correctamente' })
+})
+
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en el puerto ${PORT}`)
 })
