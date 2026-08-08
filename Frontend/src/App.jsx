@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SearchBar from './components/SearchBar'
 import './App.css'
+import MovieGrid from './components/MovieGrid'
 
 function App() {
   const [view, setView] = useState('search')
@@ -8,6 +9,7 @@ function App() {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [selectedMovie, setSelectedMovie] = useState(null)
 
   const searchMovies = async () => {
     if (!query.trim()) {
@@ -56,9 +58,14 @@ function App() {
 
           <p>Resultados encontrados: {movies.length}</p>
 
-          <button onClick={() => setView('detail')}>
-            Ir al detalle
-          </button>
+          <MovieGrid
+            movies={movies}
+            onSelect={(movie) => {
+              setSelectedMovie(movie)
+              setView('detail')
+            }}
+          />
+          
         </div>
       )}
 
