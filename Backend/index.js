@@ -72,6 +72,18 @@ app.post('/api/movies/:tmdbId/reviews', (request, response) => {
   const tmdbId = Number(request.params.tmdbId)
   const { author, score, comment } = request.body
 
+  if (!author || !score || !comment) {
+    return response.status(400).json({
+      error: 'author, score y comment son obligatorios'
+    })
+  }
+
+  if (typeof score !== 'number' || score < 1 || score > 5) {
+    return response.status(400).json({
+      error: 'score debe ser un número entre 1 y 5'
+    })
+  }
+
   const review = {
     id: Date.now(),
     tmdbId,
