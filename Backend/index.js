@@ -35,6 +35,12 @@ app.get('/api/movies/search', async (request, response) => {
 
   const data = await result.json()
 
+  if (!result.ok || data.success === false) {
+  return response.status(404).json({
+    error: 'Película no encontrada'
+  })
+ }
+
   response.json(data)
 })
 
@@ -50,6 +56,12 @@ app.get('/api/movies/:tmdbId', async (request, response) => {
   })
 
   const data = await result.json()
+
+  if (!result.ok || data.success === false) {
+    return response.status(404).json({
+      error: 'Película no encontrada'
+    })
+  }
 
   const movieReviews = reviews.filter(
     review => review.tmdbId === Number(tmdbId)
@@ -95,6 +107,27 @@ app.post('/api/movies/:tmdbId/reviews', (request, response) => {
   reviews.push(review)
 
   response.status(201).json(review)
+})
+
+app.delete('/api/reviews/:reviewId', (request, response) => {
+  const reviewId = Number(request.params.reviewId)
+
+  const reviewIndex = reviews.findIndex(
+    review => review.id === reviewId
+  )
+
+  if (reviewIndex === -1) {
+    return response.status(404).json({
+      error: 'Reseña no encontrada'
+    })
+  }
+
+  const deletedReview = reviews.splice(reviewIndex, 1)[0]
+
+  response.json({
+    message: 'Reseña eliminada correctamente',
+    review: deletedReview
+  })
 })
 
 app.listen(PORT, () => {
