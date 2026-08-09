@@ -42,8 +42,28 @@ app.get('/api/movies/search', async (request, response) => {
     error: 'Película no encontrada'
   })
  }
+ 
+ const moviesWithScore = data.results.map((movie) => {
+const movieReviews = reviews.filter(
+review => review.tmdbId === movie.id
+)
 
-  response.json(data)
+const avgScore =
+movieReviews.length > 0
+? movieReviews.reduce((sum, review) => sum + review.score, 0) /
+movieReviews.length
+: null
+
+return {
+...movie,
+avgScore
+}
+})
+
+data.results = moviesWithScore
+
+response.json(data)
+
 })
 
 app.get('/api/movies/:tmdbId', async (request, response) => {
