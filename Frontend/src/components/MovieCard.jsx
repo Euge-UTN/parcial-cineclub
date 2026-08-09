@@ -8,19 +8,25 @@ function MovieCard({ movie, onSelect }) {
     : 'Sin año'
 
   return (
-    <div onClick={() => onSelect(movie)}>
+    <div className="movie-card" onClick={() => onSelect(movie)}>
       {posterUrl ? (
         <img
           src={posterUrl}
           alt={`Poster de ${movie.title}`}
         />
       ) : (
-        <p>Sin poster</p>
+        <div className="no-poster">
+          <p>Sin poster</p>
+        </div>
       )}
-
+    <div className="movie-info"></div>
       <h3>{movie.title}</h3>
-      <p>Año: {year}</p>
-      <p>Promedio: {movie.avgScore ?? 'Sin reseñas'}</p>
+      <p>{year}</p>
+      <p className="movie-score">
+        {movie.avgScore != null ? 
+          `Promedio: ${Number(movie.avgScore).toFixed(1)}`
+          : 'Sin reseñas'}
+      </p>
     </div>
   )
 }

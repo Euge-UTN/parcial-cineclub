@@ -82,52 +82,59 @@ function App() {
 }
 
   return (
-    <div>
+  <div className="app">
+    <header className="app-header">
       <h1>CineClub</h1>
+    </header>
 
-      {view === 'search' && (
-        <div>
-          <SearchBar
-            query={query}
-            setQuery={setQuery}
-            onSearch={searchMovies}
-          />
+    {view === 'search' && (
+      <main className="search-page">
+        <h2>Buscar películas</h2>
 
-          {loading && <p>Cargando...</p>}
+        <SearchBar
+          query={query}
+          setQuery={setQuery}
+          onSearch={searchMovies}
+        />
 
-          {error && <p>{error}</p>}
+        {loading && <p className="loading">Cargando...</p>}
 
-          <p>Resultados encontrados: {movies.length}</p>
+        {error && <p className="error-message">{error}</p>}
 
-          <MovieGrid
-           movies={movies}
-           onSelect={async (movie) => {
-              setSelectedMovie(movie)
-              setView('detail')
+        <p className="results-count">
+          Resultados encontrados: {movies.length}
+        </p>
 
-              try {
-                const response = await fetch(
-                  `${import.meta.env.VITE_API_URL}/api/movies/${movie.id}`
+        <MovieGrid
+          movies={movies}
+          onSelect={async (movie) => {
+            setSelectedMovie(movie)
+            setView('detail')
+
+            try {
+              const response = await fetch(
+                `${import.meta.env.VITE_API_URL}/api/movies/${movie.id}`
+              )
+
+              const data = await response.json()
+
+              if (!response.ok) {
+                throw new Error(
+                  data.error || 'Error al obtener la película'
                 )
-
-                const data = await response.json()
-
-                if (!response.ok) {
-                  throw new Error(data.error || 'Error al obtener la película')
-                }
-
-                setReviews(data.reviews)
-                setAvgScore(data.avgScore)
-              } catch (error) {
-                setReviews([])
-                setAvgScore(null)
-                console.error(error)
               }
-            }}
-          />
 
-        </div>
-      )}
+              setReviews(data.reviews)
+              setAvgScore(data.avgScore)
+            } catch (error) {
+              setReviews([])
+              setAvgScore(null)
+              console.error(error)
+            }
+          }}
+        />
+      </main>
+    )}
 
     {view === 'detail' && selectedMovie && (
       <MovieDetail
@@ -138,8 +145,8 @@ function App() {
         onReviewCreated={createReview}
       />
     )}
-    </div>
-  )
+  </div>
+)
 }
 
 export default App

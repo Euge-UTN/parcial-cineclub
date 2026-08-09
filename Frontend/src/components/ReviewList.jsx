@@ -1,24 +1,36 @@
 function ReviewList({ reviews, avgScore }) {
   return (
-    <div>
-      <h3>Reseñas</h3>
+    <section className="reviews-section">
+      <div className="reviews-header">
+        <h3>Reseñas</h3>
 
-      <p>
-        Promedio: {avgScore !== null ? avgScore.toFixed(1) : 'Sin reseñas'}
-      </p>
+        <p className="average-score">
+          Promedio:{' '}
+          {avgScore !== null
+            ? avgScore.toFixed(1)
+            : 'Sin reseñas'}
+        </p>
+      </div>
 
       {reviews.length === 0 ? (
-        <p>Esta película todavía no tiene reseñas.</p>
+        <p className="no-reviews">
+          Esta película todavía no tiene reseñas.
+        </p>
       ) : (
-        reviews.map((review) => (
-          <div key={review.id}>
-            <h4>{review.author}</h4>
-            <p>Puntaje: {review.score}/5</p>
-            <p>{review.comment}</p>
-          </div>
-        ))
+        <div className="reviews-list">
+          {reviews.map((review) => (
+            <div className="review-card" key={review.id}>
+              <div className="review-top">
+                <h4>{review.author}</h4>
+                <span>{review.score}/5</span>
+              </div>
+
+              <p>{review.comment}</p>
+            </div>
+          ))}
+        </div>
       )}
-    </div>
+    </section>
   )
 }
 

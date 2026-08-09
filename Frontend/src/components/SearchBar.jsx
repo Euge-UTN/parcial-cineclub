@@ -1,11 +1,16 @@
 function SearchBar({ query, setQuery, onSearch }) {
   return (
-    <div>
+    <div className="search-bar">
       <input
         type="text"
-        placeholder="Buscar película..."
+        placeholder="Buscar una película..."
         value={query}
         onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            onSearch()
+          }
+        }}
       />
 
       <button onClick={onSearch}>

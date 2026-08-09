@@ -13,37 +13,42 @@ function MovieDetail({
     : null
 
   return (
-    <div>
-      <button onClick={onBack}>
+    <div className="detail-page">
+      <button className="back-button" onClick={onBack}>
         Volver a búsqueda
       </button>
 
-      {posterUrl && (
-        <img
-          src={posterUrl}
-          alt={`Poster de ${movie.title}`}
-        />
-      )}
+      <div className="movie-detail">
+        <div className="detail-poster">
+          {posterUrl && (
+            <img
+              src={posterUrl}
+              alt={`Poster de ${movie.title}`}
+            />
+          )}
+        </div>
 
-      <h2>{movie.title}</h2>
+        <div className="detail-info">
+          <h2>{movie.title}</h2>
 
-      <p>
-        Año: {movie.release_date
-          ? movie.release_date.substring(0, 4)
-          : 'Sin año'}
-      </p>
+          <p className="detail-year">
+            {movie.release_date
+              ? movie.release_date.substring(0, 4)
+              : 'Sin año'}
+          </p>
 
-      <p>
-        {movie.overview || 'Sin descripción disponible'}
-      </p>
+          <p className="overview">
+            {movie.overview || 'Sin descripción disponible'}
+          </p>
+        </div>
+      </div>
 
       <ReviewList
         reviews={reviews}
         avgScore={avgScore}
       />
 
-      <ReviewForm onReviewCreated={onReviewCreated}/>
-
+      <ReviewForm onReviewCreated={onReviewCreated} />
     </div>
   )
 }

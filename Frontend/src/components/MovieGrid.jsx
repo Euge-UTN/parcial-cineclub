@@ -6,7 +6,7 @@ function MovieGrid({ movies, onSelect }) {
   }
 
   return (
-    <div>
+    <div className="movie-grid">
       {movies.map((movie) => (
         <MovieCard
           key={movie.id}
