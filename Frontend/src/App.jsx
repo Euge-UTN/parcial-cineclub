@@ -2,6 +2,8 @@ import { useState } from 'react'
 import SearchBar from './components/SearchBar'
 import './App.css'
 import MovieGrid from './components/MovieGrid'
+import MovieDetail from './components/MovieDetail'
+import ReviewList from './components/ReviewList'
 
 function App() {
   const [view, setView] = useState('search')
@@ -10,6 +12,8 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [selectedMovie, setSelectedMovie] = useState(null)
+  const [reviews, setReviews] = useState([])
+  const [avgScore, setAvgScore] = useState(null)
 
   const searchMovies = async () => {
     if (!query.trim()) {
@@ -40,6 +44,43 @@ function App() {
     }
   }
 
+  const createReview = async (reviewData) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/movies/${selectedMovie.id}/reviews`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reviewData)
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Error al crear la reseña')
+    }
+
+    setReviews((currentReviews) => {
+      const updatedReviews = [...currentReviews, data]
+
+      const newAvgScore =
+        updatedReviews.reduce(
+          (sum, review) => sum + review.score,
+          0
+        ) / updatedReviews.length
+
+      setAvgScore(newAvgScore)
+
+      return updatedReviews
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
   return (
     <div>
       <h1>CineClub</h1>
@@ -59,25 +100,44 @@ function App() {
           <p>Resultados encontrados: {movies.length}</p>
 
           <MovieGrid
-            movies={movies}
-            onSelect={(movie) => {
+           movies={movies}
+           onSelect={async (movie) => {
               setSelectedMovie(movie)
               setView('detail')
+
+              try {
+                const response = await fetch(
+                  `${import.meta.env.VITE_API_URL}/api/movies/${movie.id}`
+                )
+
+                const data = await response.json()
+
+                if (!response.ok) {
+                  throw new Error(data.error || 'Error al obtener la película')
+                }
+
+                setReviews(data.reviews)
+                setAvgScore(data.avgScore)
+              } catch (error) {
+                setReviews([])
+                setAvgScore(null)
+                console.error(error)
+              }
             }}
           />
-          
+
         </div>
       )}
 
-      {view === 'detail' && (
-        <div>
-          <p>Vista de detalle</p>
-
-          <button onClick={() => setView('search')}>
-            Volver a búsqueda
-          </button>
-        </div>
-      )}
+    {view === 'detail' && selectedMovie && (
+      <MovieDetail
+        movie={selectedMovie}
+        onBack={() => setView('search')}
+        reviews={reviews}
+        avgScore={avgScore}
+        onReviewCreated={createReview}
+      />
+    )}
     </div>
   )
 }
