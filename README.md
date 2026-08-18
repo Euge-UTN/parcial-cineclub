@@ -62,7 +62,7 @@ PORT=3001
 
 La API key de TMDB se obtiene desde la cuenta de TMDB.
 
-El archivo `.env` no debe subirse al repositorio.
+El archivo `.env` no se debe subir al repositorio.
 
 Para iniciar el backend:
 
@@ -131,6 +131,8 @@ También se puede agregar una nueva reseña indicando:
 
 Las reseñas se almacenan en memoria en el backend, por lo que se pierden al reiniciar el servidor.
 
+Al hacer clic en el nombre **CineClub** del encabezado, se vuelve a la pantalla de inicio.
+
 ## Endpoints principales
 
 ### Buscar películas
@@ -161,7 +163,7 @@ Ejemplo de cuerpo:
 
 ```json
 {
-  "author": "Eugenia",
+  "author": "Usuario",
   "score": 5,
   "comment": "Muy buena película"
 }
