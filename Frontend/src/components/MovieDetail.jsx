@@ -6,7 +6,8 @@ function MovieDetail({
   onBack,
   reviews,
   avgScore,
-  onReviewCreated
+  onReviewCreated,
+  onDeleteReview
 }) {
   const posterUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w300${movie.poster_path}`
@@ -46,6 +47,7 @@ function MovieDetail({
       <ReviewList
         reviews={reviews}
         avgScore={avgScore}
+        onDeleteReview={onDeleteReview}
       />
 
       <ReviewForm onReviewCreated={onReviewCreated} />

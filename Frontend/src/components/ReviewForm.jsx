@@ -3,6 +3,7 @@ import { useState } from 'react'
 function ReviewForm({ onReviewCreated }) {
   const [author, setAuthor] = useState('')
   const [score, setScore] = useState('')
+  const [hoverScore, setHoverScore] = useState(0)
   const [comment, setComment] = useState('')
   const [error, setError] = useState('')
 
@@ -43,17 +44,26 @@ function ReviewForm({ onReviewCreated }) {
 
         <div className="form-group">
           <label>Puntaje</label>
-          <select
-            value={score}
-            onChange={(event) => setScore(event.target.value)}
+
+          <div className="star-rating"
+            onMouseLeave={() => setHoverScore(0)}
           >
-            <option value="">Seleccionar</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+           {[1, 2, 3, 4, 5].map((value) => (
+           <button
+              type="button"
+              key={value}
+              className={
+                value <= (hoverScore || Number(score))
+                  ? 'star active'
+                  : 'star'
+              }
+              onClick={() => setScore(value)}
+              onMouseEnter={() => setHoverScore(value)}
+            >
+             ★
+           </button>
+          ))}
+        </div>
         </div>
 
         <div className="form-group">

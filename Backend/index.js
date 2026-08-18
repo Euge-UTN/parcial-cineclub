@@ -27,7 +27,7 @@ app.get('/api/movies/search', async (request, response) => {
   })
 }
 
-  const url = `https://api.themoviedb.org/3/search/movie?query=${query}`
+  const url = `https://api.themoviedb.org/3/search/movie?query=${query}&language=es-ES`
 
   const result = await fetch(url, {
     headers: {
@@ -69,7 +69,7 @@ response.json(data)
 app.get('/api/movies/:tmdbId', async (request, response) => {
   const tmdbId = request.params.tmdbId
 
-  const url = `https://api.themoviedb.org/3/movie/${tmdbId}`
+  const url = `https://api.themoviedb.org/3/movie/${tmdbId}?language=es-ES`
 
   const result = await fetch(url, {
     headers: {

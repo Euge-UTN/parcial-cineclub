@@ -14,6 +14,7 @@ function App() {
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [reviews, setReviews] = useState([])
   const [avgScore, setAvgScore] = useState(null)
+  const [hasSearched, setHasSearched] = useState(false)
 
   const searchMovies = async () => {
     if (!query.trim()) {
@@ -21,6 +22,7 @@ function App() {
       return
     }
 
+    setHasSearched(true)
     setLoading(true)
     setError('')
 
@@ -89,9 +91,15 @@ function App() {
 
     {view === 'search' && (
       <main className="search-page">
-        <h2>Buscar películas</h2>
+        {!hasSearched && !loading && (
+         <section className="welcome-section">
+         <h2>
+           Elegí tu próxima película y dejá tu opinión en la comunidad.
+        </h2>
+      </section>
+    )}
 
-        <SearchBar
+     <SearchBar
           query={query}
           setQuery={setQuery}
           onSearch={searchMovies}
@@ -101,10 +109,13 @@ function App() {
 
         {error && <p className="error-message">{error}</p>}
 
-        <p className="results-count">
-          Resultados encontrados: {movies.length}
-        </p>
-
+        {hasSearched && !loading && (
+          <p className="results-count">
+            Resultados encontrados: {movies.length}
+          </p>
+        )}
+        
+        {hasSearched && (
         <MovieGrid
           movies={movies}
           onSelect={async (movie) => {
@@ -133,6 +144,7 @@ function App() {
             }
           }}
         />
+        )}
       </main>
     )}
 
