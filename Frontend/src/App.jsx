@@ -4,6 +4,7 @@ import './App.css'
 import MovieGrid from './components/MovieGrid'
 import MovieDetail from './components/MovieDetail'
 import ReviewList from './components/ReviewList'
+import fondoCine from './assets/cine-fondo.jpg'
 
 function App() {
   const [view, setView] = useState('search')
@@ -76,6 +77,14 @@ function App() {
 
       setAvgScore(newAvgScore)
 
+      setMovies((currentMovies) =>
+        currentMovies.map((movie) =>
+          movie.id === selectedMovie.id
+            ? { ...movie, avgScore: newAvgScore }
+            : movie
+        )
+      )
+      
       return updatedReviews
     })
   } catch (error) {
@@ -92,18 +101,31 @@ function App() {
     {view === 'search' && (
       <main className="search-page">
         {!hasSearched && !loading && (
-         <section className="welcome-section">
-         <h2>
-           Elegí tu próxima película y dejá tu opinión en la comunidad.
-        </h2>
-      </section>
-    )}
+          <section
+            className="welcome-section"
+            style={{ '--background-image': `url(${fondoCine})` }}
+          >
+            <div className="welcome-content">
+              <h2>
+                Elegí tu próxima película y dejá tu opinión en la comunidad.
+              </h2>
 
-     <SearchBar
-          query={query}
-          setQuery={setQuery}
-          onSearch={searchMovies}
-        />
+              <SearchBar
+                query={query}
+                setQuery={setQuery}
+                onSearch={searchMovies}
+              />
+            </div>
+          </section>
+        )}
+
+        {hasSearched && (
+          <SearchBar
+            query={query}
+            setQuery={setQuery}
+            onSearch={searchMovies}
+          />
+        )}
 
         {loading && <p className="loading">Cargando...</p>}
 
