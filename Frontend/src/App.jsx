@@ -84,7 +84,7 @@ function App() {
             : movie
         )
       )
-      
+
       return updatedReviews
     })
   } catch (error) {
@@ -95,7 +95,12 @@ function App() {
   return (
   <div className="app">
     <header className="app-header">
-      <h1>CineClub</h1>
+      <h1 onClick={() => {
+          setView('search')
+          setHasSearched(false)
+        }}>
+          CineClub
+      </h1>
     </header>
 
     {view === 'search' && (

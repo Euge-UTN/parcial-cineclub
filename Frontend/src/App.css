@@ -56,6 +56,7 @@ button {
   font-weight: 600;
   letter-spacing: -0.4px;
   text-align: left;
+  cursor: pointer;
 }
 
 /* PÁGINA DE BÚSQUEDA */
